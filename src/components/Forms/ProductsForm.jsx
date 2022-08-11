@@ -7,9 +7,10 @@ function setQuantity(event) {
 }
 
 const AddProducts = (props) => {
+
     return (
         <main>
-            <section className="extra-padding dark-bg">
+            <section className="extra-padding blue-bg">
                 <div className="container">
                     <PageTitle
                         title="Add Products"
@@ -43,11 +44,14 @@ const AddProducts = (props) => {
                                         <b>Category</b>
                                     </label>
                                     <select className="form-select" name="category">
-                                        <option value="furniture">Furniture</option>
                                         <option value="electronics">Electronics</option>
+                                        <option value="study">Study</option>
                                         <option value="fashion">Fashion</option>
-                                        <option value="kitchen">kitchen</option>
-                                        <option value="homeDecor">Home Decor</option>
+                                        <option value="kitchen">Kitchen</option>
+                                        <option value="beauty">Beauty</option>
+                                        <option value="sports">Sports</option>
+                                        <option value="toys">Toys</option>
+                                        <option value="home">Home Decor</option>
                                     </select>
                                 </div>
                             </div>
@@ -55,12 +59,11 @@ const AddProducts = (props) => {
                             <div className="col">
                                 <div className="mb-3 d-flex flex-column">
                                     <label>
-                                        <b>Price ($) </b>
+                                        <b>Price (₹) </b>
                                     </label>
                                     <input
-                                        className="item"
                                         type="number"
-                                        placeholder="$20"
+                                        placeholder="₹20"
                                         name="price"
                                     />
                                 </div>
@@ -74,7 +77,6 @@ const AddProducts = (props) => {
                                         <b>Stock</b>
                                     </label>
                                     <input
-                                        className="item"
                                         type="number"
                                         min={1}
                                         placeholder="Available Quantity"
@@ -90,7 +92,6 @@ const AddProducts = (props) => {
                                         <b>Brand</b>
                                     </label>
                                     <input
-                                        className="item"
                                         type="text"
                                         placeholder="Dell"
                                         name="brand"
@@ -106,7 +107,6 @@ const AddProducts = (props) => {
                                         <b>Ratings</b>
                                     </label>
                                     <input
-                                        className="item"
                                         type="number"
                                         min={0}
                                         max={5}
@@ -124,7 +124,6 @@ const AddProducts = (props) => {
                                         <b>Offers (% Off)</b>
                                     </label>
                                     <input
-                                        className="item"
                                         type="number"
                                         name="offers"
                                         placeholder="50% Off"
@@ -135,13 +134,12 @@ const AddProducts = (props) => {
                             </div>
                         </div>
 
-                        <div className="col">
+                        <div className="col p-0">
                             <div className="mb-3 d-flex flex-column">
                                 <label>
                                     <b>Tags</b>
                                 </label>
                                 <input
-                                    className="item"
                                     type="text"
                                     placeholder="Laptop, Computer, ..."
                                     name="tags"
@@ -150,14 +148,7 @@ const AddProducts = (props) => {
                         </div>
 
                         <div className="mb-3 d-flex flex-column">
-                            <label>
-                                <b>Image</b>
-                            </label>
-
-                            {/* To hide the default style of the file type input, it must be wrapped to a label & then we can style the label */}
-                            {/* <label className="file-input" htmlFor="file">
-                                Choose File
-                            </label> */}
+                            <b>Image</b>
 
                             <input type="file" id="file" name="image" placeholder="select image" accept="image/png, image/jpeg" />
                         </div>

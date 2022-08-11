@@ -1,17 +1,17 @@
 .card {
-  border: 1px solid #020202;
+  border: 1px solid rgb(202, 201, 201);
   width: 15rem;
   height: 18rem;
   display: inline-block;
   background: #ffffff;
   padding: 0.4rem;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   margin: 1rem;
-  /* box-shadow: 0.2rem 0.1rem 0.6rem rgba(0, 0, 0, 0.2); */
 }
 
 .image {
   height: 60%;
+  overflow: hidden;
 }
 .detail_div {
   height: 40%;
@@ -25,6 +25,8 @@
   /* border: 2px solid green; */
   display: grid;
   justify-content: center;
+  text-overflow: ellipsis;
+
 }
 .name_div span {
   margin: 0;
@@ -34,6 +36,8 @@
   justify-content: center;
   font-weight: bold;
   font-family: "Source Sans Pro", sans-serif;
+  text-overflow: ellipsis;
+
 }
 
 .price_div {
@@ -61,33 +65,4 @@
   text-align: center;
   color: black;
   font-weight: bold;
-}
-
-.details {
-  height: 100%;
-  width: 75%;
-  background: #202020;
-  color: #f4f9fd;
-  font-family: "Source Sans Pro", sans-serif;
-  font-weight: bold;
-  border-radius: 1rem;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-right: none;
-}
-.add {
-  height: 100%;
-  width: 25%;
-  font-size: 1rem;
-  background: #e1775d;
-  color: black;
-
-  font-family: "Source Sans Pro", sans-serif;
-  font-weight: bold;
-  margin: 0;
-  padding: 0;
-  border-radius: 1rem;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-left: none;
 }

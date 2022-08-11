@@ -1,18 +1,20 @@
-import React, { useState, useEffect, Fragment } from 'react'
+import React, { useState, useEffect } from 'react'
+import {useNavigate} from "react-router-dom"
+
+import Modal from '../Common_Components/Modal';
 
 import PageTitle from "../Common_Components/PageTitle"
 import Image from '../../pages/Image'
-import Catalog_Image from '../ProductsPage/Catalog_Image';
-import Comment from './Comment';
+import Card from '../../newComponents/productsPage/card/card';
 import Rating from '@mui/material/Rating';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 const ProductInfo = () => {
+    const navigate = useNavigate()
 
     const [ID, productID] = useState("")
     const [products, setProducts] = useState([])
     var myCount = 0;
+    var itemPrice= 0;
 
     useEffect(() => {
         //  window.location.search is used here to get the query (productID here) from the URL
@@ -27,14 +29,48 @@ const ProductInfo = () => {
 
     }, [])
 
+    console.log("Product ID is: "+ ID);
+
+    //  Post Data to add to cart
+    const postData = async (event) => {
+        event.preventDefault()
+        // Using object destructuring for: productID= product.productID
+        // const { productID, Price } = products[0]
+        const productID= ID
+        const Price= itemPrice
+        // console.log("Price is: "+ Price);
+
+        const res = await fetch("/AddToCart", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            // Converting JSON to string since our backend cannot understand JSON
+            //  The string will be sent as body
+            body: JSON.stringify({
+                //  Uisng object destructuring for productID= productID
+                productID, Price
+            })
+        })
+
+        const data = await res.json()
+
+        if (data.status === 200) {
+            navigate("/cart")
+        }
+        else {
+            window.alert("Failed to add product to cart!\nTry Again.")
+        }
+    }
 
     return (
-        <section className="dark-bg pt-4">
+        <section className="blue-bg pt-5">
             <div className="container">
 
                 <PageTitle
                     title="Product Info"
-                    desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo."
+                    desc=""
                 ></PageTitle>
 
                 <div className="white-bg p-5">
@@ -42,57 +78,55 @@ const ProductInfo = () => {
                     <div className="row">
 
                         {
+                            // Among all the products, mapping only the product whose ID matches the ID of our selected Product.
                             products.map((contents) => {
 
                                 if (contents._id === ID) {
-                                    return (
-                                        <Fragment key={contents._id}>
-                                            {/* Image Gallery */}
-                                            <div className="col-md-6 dark-bg">
+                                    itemPrice= contents.Price
 
-                                                <div className='d-flex justify-content-center align-items-center mt-auto'>
+                                    return (
+                                        <div key={contents._id} className="d-flex justify-content-between">
+                                            {/* Image Gallery */}
+                                            <div className="col-md-5 box">
+
+                                                <div className='p-5'>
                                                     <Image
                                                         photoID={contents.ImageID}
                                                     ></Image>
                                                 </div>
+                                                <div className='d-flex justify-content-between mt-2 ps-4 pe-4'>
+                                                    <Rating name="read-only" size="small" precision={0.5} value={4} readOnly />
 
+                                                    <div><h5>₹ {contents.Price}</h5></div>
+                                                    
+                                                </div>
                                             </div>
 
                                             {/* Description */}
-                                            <div className="col-md-6">
+                                            <div className="col-md-5">
                                                 <div className='d-flex justify-content-center '>
-                                                    <h3>{contents.Product}</h3>
+                                                    <h3 className='heading'>{contents.Product}</h3>
                                                 </div>
 
-                                                <div className='d-flex justify-content-between mt-2'>
-                                                    <Rating name="read-only" size="small" precision={0.5} value={4} readOnly />
-
-                                                    <div><h5>$ {contents.Price}</h5></div>
-                                                </div>
-
-                                                <hr></hr>
-
-                                                <div className="m-2 p-2">
+                                                <div className="m-2 p-2 box">
                                                     <p>{contents.Desc}</p>
                                                 </div>
 
-                                                <hr></hr>
+                                                <div className='d-flex justify-content-between pt-4'>
+                                                    <Modal
+                                                        btnTitle= "Buy Now" 
+                                                        subTotal= {contents.Price}
+                                                        totalPrice= {contents.Price}
+                                                    ></Modal>
 
-                                                <div className='d-flex justify-content-around '>
-                                                    <button className="btn btn-primary d-flex justify-content-between" type="button">
-                                                        <AttachMoneyIcon></AttachMoneyIcon>
-                                                        Buy Now
-                                                    </button>
-
-                                                    <button className="btn btn-danger d-flex justify-content-between" type="button">
-                                                        <ShoppingCartOutlinedIcon></ShoppingCartOutlinedIcon>
+                                                    <button className="btn-normal btn-bg-green mt-4 w-100 ms-1 me-1" type="button" onClick={postData}>
                                                         Add to Cart
                                                     </button>
                                                 </div>
 
                                             </div>
 
-                                        </Fragment>
+                                        </div>
                                     )
                                 }
 
@@ -100,31 +134,26 @@ const ProductInfo = () => {
                         }
                     </div>
 
-                    {/* Reviews (Comments) */}
-                    <h3 className="d-flex justify-content-center mt-5" >Reviews</h3>
-                    <Comment></Comment>
-                    <Comment></Comment>
-                    <Comment></Comment>
-
                     {/* Related Products */}
-                    <div className="clean-related-items mt-5">
-                        <h3 className="d-flex justify-content-center">Related Products</h3>
+                    <div className="clean-related-items mt-5 pt-4">
+                        <h3 className="d-flex justify-content-center heading">Related Products</h3>
 
                         <div className="items row g-3">
 
                             {
                                 products.map((contents) => {
-                                    if (contents._id != ID && myCount < 3) {
+                                    if (contents._id != ID && myCount < 4) {
                                         myCount++;
 
                                         return (
-                                            <Catalog_Image
+                                            <Card
                                                 key={contents._id}
-                                                myImageID={contents.ImageID}
-                                                itemPrice={contents.Price}
-                                                starValue={contents.Ratings}
+                                                name={contents.Product}
                                                 productID={contents._id}
-                                            ></Catalog_Image>
+                                                ratings={contents.Ratings}
+                                                price={contents.Price}
+                                                imageID={contents.ImageID}
+                                            ></Card>
                                         )
                                     }
                                 })

@@ -13,80 +13,117 @@ import axios from 'axios';
 
 // console.log("categoriesData: "+ categoriesData);
 
-var sliderData = [
+var categoryData = [
     {
         id: 1,
-        src: "https://images.unsplash.com/photo-1626288215937-747af7be5b7b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fDklM0ExNnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=400&q=60",
-        altText: "img1",
-        label: "First slide label",
-        desc: "Some representative placeholder content for the first slide."
+        src: "img/categories/electronics.jpg",
+        altText: "Image Loading...",
+        label: "Electronics"
+
     },
 
     {
         id: 2,
-        src: "https://images.unsplash.com/photo-1626288215937-747af7be5b7b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fDklM0ExNnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=400&q=60",
-        altText: "img2",
-        label: "Second slide label",
-        desc: "Some representative placeholder content for the first slide."
+        src: "img/categories/study.jpg",
+        altText: "Image Loading...",
+        label: "Study"
+
     },
 
     {
         id: 3,
-        src: "https://images.unsplash.com/photo-1626288215937-747af7be5b7b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fDklM0ExNnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=400&q=60",
-        altText: "img3",
-        label: "Third slide label",
-        desc: "Some representative placeholder content for the first slide."
-    }
-]
+        src: "img/categories/fashion.jpg",
+        altText: "Image Loading...",
+        label: "Fashion"
 
-var productsData = [
-    {
-        id: 1,
-        src: "img/nature/image1.jpg",
-        altText: "img1",
-        label: "First label",
-        desc: "Some representative placeholder content for the first slide."
-    },
-
-    {
-        id: 2,
-        src: "img/nature/image2.jpg",
-        altText: "img2",
-        label: "First label",
-        desc: "Some representative placeholder content for the first slide."
-    },
-
-    {
-        id: 3,
-        src: "img/nature/image3.jpg",
-        altText: "img3",
-        label: "First label",
-        desc: "Some representative placeholder content for the first slide."
     },
 
     {
         id: 4,
-        src: "img/nature/image4.jpg",
-        altText: "img4",
-        label: "First label",
-        desc: "Some representative placeholder content for the first slide."
+        src: "img/categories/kitchen.jpg",
+        altText: "Image Loading...",
+        label: "Kitchen"
+
     },
 
     {
         id: 5,
-        src: "img/nature/image5.jpg",
-        altText: "img5",
-        label: "First label",
-        desc: "Some representative placeholder content for the first slide."
+        src: "img/categories/beauty.jpg",
+        altText: "Image Loading...",
+        label: "Beauty"
+
     },
 
     {
         id: 6,
-        src: "img/nature/image6.jpg",
-        altText: "img6",
-        label: "First label",
-        desc: "Some representative placeholder content for the first slide."
+        src: "img/categories/sports.jpg",
+        altText: "Image Loading...",
+        label: "Sports"
     },
+
+    {
+        id: 7,
+        src: "img/categories/toys.jpg",
+        altText: "Image Loading...",
+        label: "Toys"
+    },
+
+    {
+        id: 8,
+        src: "img/categories/homeDecor.jpg",
+        altText: "Image Loading...",
+        label: "Home Decor"
+    },
+]
+
+var sliderData = [
+    {
+        id: 1,
+        src: "img/slider/slide-1.jpg",
+        altText: "img1",
+    },
+
+    {
+        id: 2,
+        src: "img/slider/slide-2.jpg",
+        altText: "img2",
+    },
+
+    {
+        id: 3,
+        src: "img/slider/slide-3.jpg",
+        altText: "img3",
+    }, 
+
+    {
+        id: 4,
+        src: "img/slider/slide-4.jpg",
+        altText: "img4",
+    }, 
+
+    {
+        id: 6,
+        src: "img/slider/slide-6.png",
+        altText: "img5",
+    },
+
+    {
+        id: 7,
+        src: "img/slider/slide-7.png",
+        altText: "img5",
+    },
+
+    {
+        id: 8,
+        src: "img/slider/slide-8.png",
+        altText: "img5",
+    },
+
+    {
+        id: 9,
+        src: "img/slider/slide-9.png",
+        altText: "img5",
+    }
 ]
 
 var profileAvatar = [
@@ -132,4 +169,6 @@ var profileAvatar = [
     },
 ]
 
-export { sliderData, productsData, profileAvatar }
+
+
+export { sliderData, profileAvatar, categoryData }

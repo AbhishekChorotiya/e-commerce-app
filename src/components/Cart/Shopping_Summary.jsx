@@ -1,7 +1,9 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
-const Shopping_Summary = () => {
+import Modal from '../Common_Components/Modal'
+
+const Shopping_Summary = (props) => {
     const [totalPrice,setTotalPrice] = useState('')
 
     useEffect(()=>{
@@ -12,9 +14,9 @@ const Shopping_Summary = () => {
 
 
     return (
-        <div className="greenish-bg mt-4 p-4">
+        <div className="mt-4 p-4">
 
-            <h2 className="d-flex justify-content-center">Order Summary</h2>
+            <h2 className="d-flex justify-content-center heading">Order Summary</h2>
 
             <div className="form-style mt-4 ">
 
@@ -36,7 +38,7 @@ const Shopping_Summary = () => {
                     </div>
 
                     <div>
-                        <p>$0</p>
+                        <p>$ 0</p>
                     </div>
                 </div>
 
@@ -47,7 +49,7 @@ const Shopping_Summary = () => {
                     </div>
 
                     <div>
-                        <p>$0</p>
+                        <p>FREE</p>
                     </div>
                 </div>
 
@@ -56,7 +58,7 @@ const Shopping_Summary = () => {
                 {/* Total Amount */}
                 <div className="d-flex justify-content-between">
                     <div>
-                        <h5 className="text-primary">Total</h5>
+                        <h5 className='red-color'>Total</h5>
                     </div>
 
                     <div>
@@ -65,7 +67,14 @@ const Shopping_Summary = () => {
                 </div>
 
                 {/* Buy Button */}
-                <button className="btn-normal mt-4 w-100" type="button">Buy</button>
+                {/* <button className="btn-normal mt-4 w-100" type="button">Buy</button> */}
+                <Modal
+                    btnTitle= "Buy"
+                    subTotal= {totalPrice}
+                    totalPrice= {totalPrice}
+
+                    clearCartfunc2= {props.clearCartfunc1}
+                ></Modal>
             </div>
 
         </div>

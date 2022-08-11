@@ -1,4 +1,4 @@
-//  REQUIRING MODULES -------------------------------------------------------------------------------
+//  REQUIRING MODULES ---------------------------------------------------------------------------------------------
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -8,20 +8,20 @@ const port = process.env.PORT || 8000;
 const multer = require("multer");
 const upload = multer();
 const cookieParser = require("cookie-parser");
-// Middleware Auth ----------------------------------
+// Middleware Auth ------------------------------------------------------------------------------------------------
 const auth = require("./Middleware/auth");
 const loginCheck = require("./Middleware/loginCheck");
 
-// Using Mongoose Models ---------------------------------------------------------------------------------
+// Using Mongoose Models ------------------------------------------------------------------------------------------
 const UserObj = require("./models/user");
 const ProductObj = require("./models/product");
 const ImageObj = require("./models/images");
 
-// CREATING SERVER ----------------------------------------------------------------------------------
+// CREATING SERVER -------------------------------------------------------------------------------------------------
 var app = express();
 app.use(cookieParser());
 
-//  USING MODULES -----------------------------------------------------------------------------------
+//  USING MODULES --------------------------------------------------------------------------------------------------
 app.use(express.static("public"));
 app.use(cors());
 app.use(bodyParser.json());
@@ -31,7 +31,7 @@ app.use(
     })
 );
 
-// CONNECTING SERVER TO MONGODB DATABASE ----------------------------------------------------------------
+// CONNECTING SERVER TO MONGODB DATABASE ----------------------------------------------------------------------------
 mongoose.connect("mongodb://127.0.0.1:27017/ECommerce");
 var db = mongoose.connection;
 
@@ -40,7 +40,7 @@ db.once("open", () => {
     console.log("Connection Successful");
 });
 
-// ROUTES HERE ----------------------------------------------------------------------------------------------
+// ROUTES HERE -------------------------------------------------------------------------------------------------------
 
 //  1. Home Route
 app.get("/", (req, res) => {
@@ -56,11 +56,11 @@ app.post("/login", async (req, res) => {
         );
         const token = await user.generateAuthToken();
         res.cookie("jwt", token);
-        return res.send({message: "Login OK"})
+        return res.send({ message: "Login OK" })
         // res.redirect("/home");
     } catch (e) {
         // res.send("Invalid Credentials");
-        return res.send({status: 401, error: "Unauthorized response "})
+        return res.send({ status: 401, error: "Unauthorized response " })
     }
 });
 
@@ -89,7 +89,7 @@ app.post("/signUp", (req, res) => {
         .save()
         .then(() => {
             // console.log(user);
-            res.send({status: 200, message: "OK! SignUp Successful"})
+            res.send({ status: 200, message: "OK! SignUp Successful" })
         })
         .catch((e) => {
             console.log(e);
@@ -104,112 +104,77 @@ app.get("/getProfile", auth, async (req, res) => {
     });
 
     res.send(req.user)
-
-
 });
 
-//  5. Update User Details Route
-app.post("/updateDetails", auth, upload.single("image"), async (req, res) => {
+//  6. Check Admin
+app.get("/checkAdmin", auth, async (req, res) =>{
+    if( req.user.Email == "admin007@gmail.com" && req.user.Password == "iamadmin007" ){
+        res.send({status: "admin"})
+    }
+    else{
+        res.send({status: "notAdmin"})
+    }
+})
+
+//  5. Get Profile Image
+app.get("/getProfileImage", auth, async (req, res) => {
     res.set({
         "Access-Control-Allow-Origin": "*",
     });
+    res.set("Content-Type", "image/jpg");
 
-    // console.log(req.body);
+    res.send(req.user.ImageData)
+});
 
-    var fName = req.body.first_name;
-    var lName = req.body.last_name;
-    var email = req.body.Email;
-    var password = req.body.Password;
-    var phone = req.body.Phone;
-    var city = req.body.city;
-    var country = req.body.country;
-    var address = req.body.address;
+//  6. Upload Image
+app.post('/uploadImage', auth, upload.single("image"), async (req, res) => {
 
-    console.log("req.file: " + req.file);
-    var image = req.file.buffer;
-
-    console.log("\n\nIn Update Details Route.");
-    console.log("fName: " + fName);
-
-    if (typeof localStorage === "undefined" || localStorage === null) {
-        var LocalStorage = require("node-localstorage").LocalStorage;
-        localStorage = new LocalStorage("./scratch");
+    try {
+        var image = req.file.buffer;
+        if (image) {
+            req.user.ImageURL = '';
+            req.user.ImageData = image;
+        };
+        req.user.save()
+        res.redirect('/profile')
+    } catch (error) {
+        res.send('error: please! upload Image')
     }
 
-    var data = localStorage.getItem("userToken");
-    console.log("The token id of the user in different route is: " + data);
+})
 
-    if (fName != "") {
-        db.collection("users").updateOne(
-            { _id: ObjectId(data) },
-            { $set: { Fname: fName } }
-        );
+//  5. Update User Details Route
+app.post("/updateDetails", auth, async (req, res) => {
+    res.set({
+        "Access-Control-Allow-Origin": "*",
+    });
+    try {
+        var fName = req.body.first_name;
+        var lName = req.body.last_name;
+        var email = req.body.Email;
+        var password = req.body.Password;
+        var phone = req.body.Phone;
+        var city = req.body.city;
+        var country = req.body.country;
+        var address = req.body.address;
+
+        if (fName) req.user.Fname = fName;
+        if (lName) req.user.Lname = lName;
+        if (email) req.user.Email = email;
+        if (password) req.user.Password = password;
+        if (phone) req.user.Phone = phone;
+        if (city) req.user.City = city;
+        if (country) req.user.Country = country;
+        if (address) req.user.Address = address;
+
+
+        req.user.save()
+
+        res.redirect('/profile')
+    } catch (error) {
+        res.send('error: something went wrong!')
     }
 
-    if (lName != "") {
-        db.collection("users").updateOne(
-            { _id: ObjectId(data) },
-            { $set: { Lname: lName } }
-        );
-    }
-
-    if (email != "") {
-        db.collection("users").updateOne(
-            { _id: ObjectId(data) },
-            { $set: { Email: email } }
-        );
-    }
-
-    if (password != "") {
-        db.collection("users").updateOne(
-            { _id: ObjectId(data) },
-            { $set: { Password: password } }
-        );
-    }
-
-    if (phone != "") {
-        db.collection("users").updateOne(
-            { _id: ObjectId(data) },
-            { $set: { Phone: phone } }
-        );
-    }
-
-    if (city != "") {
-        db.collection("users").updateOne(
-            { _id: ObjectId(data) },
-            { $set: { City: city } }
-        );
-    }
-
-    if (country != "") {
-        db.collection("users").updateOne(
-            { _id: ObjectId(data) },
-            { $set: { Country: country } }
-        );
-    }
-
-    if (address != "") {
-        db.collection("users").updateOne(
-            { _id: ObjectId(data) },
-            { $set: { Address: address } }
-        );
-    }
-
-    if (image != 0) {
-        // If we have uploaded an image, then set avatar to be null
-        db.collection("users").updateOne(
-            { _id: ObjectId(data) },
-            { $set: { ImageURL: "" } }
-        );
-
-        // Save the uploaded image in ImageData
-        db.collection("users").updateOne(
-            { _id: ObjectId(data) },
-            { $set: { ImageData: image } }
-        );
-    }
-
-    res.redirect("/profile");
 });
 
 //  6. Save Image Route
@@ -218,7 +183,7 @@ app.post("/saveImage", auth, (req, res) => {
     req.user.ImageURL = myImageURL;
     req.user.save()
 
-    res.send({status: 200})
+    res.send({ status: 200 })
 });
 
 //  7. Add Products Route
@@ -280,7 +245,7 @@ app.get("/get", async (req, res) => {
         "Access-Control-Allow-Origin": "*",
     });
     const products = await ProductObj.getAllproducts();
-    console.log("getting products");
+    // console.log("getting products");
     res.json(products);
 });
 
@@ -291,10 +256,11 @@ app.get("/SearchProducts", async (req, res) => {
     });
     if (!req.query.item == '') {
         console.log(req.query.item.toLowerCase());
+
         const products = await ProductObj.getProduct(
             req.query.item.toLowerCase().split(" ")
         );
-        console.log("getting products");
+        // console.log("getting products");
         res.json(products);
     } else {
         res.redirect('/');
@@ -304,7 +270,7 @@ app.get("/SearchProducts", async (req, res) => {
 //  10. Get Particular Product
 app.get("/selected/:data", async (req, res) => {
     var myData = req.params.data;
-    // console.log("myData is: "+ myData);
+    console.log("myData is: "+ myData);
 
     const product = await ProductObj.findOne({ _id: ObjectId(myData) });
     var productCategory = product.Category;
@@ -336,16 +302,18 @@ app.post("/AddToCart", auth, (req, res) => {
     // If the item is present in the Cart
     if (index != -1) {
         req.user.Cart[index].Quantity++;
+
     }
     else {
-        req.user.Cart = req.user.Cart.concat({ productID: myProductID, Quantity: 1, Price:price });
+        console.log(req.user.Cart)
+        req.user.Cart = req.user.Cart.concat({ productID: myProductID, Quantity: 1, Price: price });
     }
 
     req.user.save();
-    res.send({status: 200, message: "Added to cart!"});
+    res.send({ status: 200, message: "Added to cart!" });
 });
 
-//  11. Add To Cart
+//  11. Remove one item from cart
 app.post("/removeOneFromCart", auth, (req, res) => {
     const myProductID = req.body.productID;
     const price = req.body.itemPrice
@@ -364,7 +332,7 @@ app.post("/removeOneFromCart", auth, (req, res) => {
     // If the item is present in the Cart
     if (index != -1) {
 
-        if(req.user.Cart[index].Quantity == 1){
+        if (req.user.Cart[index].Quantity == 1) {
             //  Remove the item from the cart
             req.user.Cart = req.user.Cart.filter((cartItem) => {
                 // console.log("cartItem.productID is: "+ cartItem.productID);
@@ -372,17 +340,25 @@ app.post("/removeOneFromCart", auth, (req, res) => {
             })
         }
 
-        else{
+        else {
             req.user.Cart[index].Quantity--;
         }
     }
     else {
-        req.user.Cart = req.user.Cart.concat({ productID: myProductID, Quantity: 1, Price:price });
+        req.user.Cart = req.user.Cart.concat({ productID: myProductID, Quantity: 1, Price: price });
     }
 
     req.user.save();
-    res.send({status: 200, message: "Removed one item from cart!"});
+    res.send({ status: 200, message: "Removed one item from cart!" });
 });
+
+//  12. Clear Cart
+app.get("/clearCart", auth, (req, res) =>{
+    req.user.Cart= []
+    req.user.save();
+
+    res.send(req.user.Cart)
+})
 
 //  12. Get Cart Data
 app.get("/cart", auth, (req, res) => {
@@ -423,25 +399,24 @@ app.post("/logout", auth, async (req, res) => {
     res.redirect("/");
 });
 
-app.get('/total',auth,(req,res)=>{
+
+//  15. Total Price
+app.get('/total', auth, (req, res) => {
     var total = 0
 
-    req.user.Cart.forEach((item)=>{
-        total+=item.Quantity*item.Price
+    req.user.Cart.forEach((item) => {
+        total += item.Quantity * item.Price
     })
 
     res.send(total.toString())
 })
 
-//  15. Status Route
+//  16. Status Route
 app.get("/status", loginCheck, (req, res) => {
-    res.send(req.status)
+    res.send({ status: req.status, fname: req.fname })
 });
 
-
-
-
-// ROUTES ENDS HERE ----------------------------------------------------------------------------------------
+// ROUTES ENDS HERE ---------------------------------------------------------------------------------------------------
 
 app.listen(port);
 console.log("Server Listening on port: " + port);

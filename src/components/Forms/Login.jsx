@@ -11,6 +11,8 @@ const Login = (props) => {
         Password: ""
     })
 
+    const [loginStatus, setLoginStatus] = useState({ state: 'Login', status: false })
+
     const handleInputs = (event) => {
         setLoginDetails({ ...loginDetails, [event.target.name]: event.target.value })
         // console.log(loginDetails);
@@ -37,21 +39,35 @@ const Login = (props) => {
 
         const data = await res.json()
 
-        console.log("Data is: " + JSON.stringify(data));
+        // console.log("Data is: " + JSON.stringify(data));
 
         if (data.status === 401) {
-            window.alert("Invalid Credentials!")
+            setLoginStatus({ state: 'Invalid Credentials !' })
+
+            //  Setting what to do after 2000ms time.
+            setTimeout(() => {
+                setLoginStatus({ state: 'Login' })
+            }, 2000);
         }
         else {
-            window.alert("Login Successful!")
-            console.log("Login Success");
-            navigate("/home")
+            // Resetting the data after successful login
+            setLoginDetails({
+                Email: "",
+                Password: ""
+            })
+
+            setLoginStatus({ state: 'Logged in successfully...', status: true })
+
+            //  Setting what to do after 1500ms time.
+            setTimeout(() => {
+                navigate("/home")
+            }, 1500);
         }
     }
 
     return (
         <main className="">
-            <section className="extra-padding dark-bg" style={{ height: '100vh', paddingTop: '5%' }} >
+            <section className="extra-padding blue-bg" style={{ height: '100vh', paddingTop: '5%' }} >
                 <div className="container">
 
                     <PageTitle
@@ -62,22 +78,22 @@ const Login = (props) => {
                     <form className="form-style" method="post">
                         <div className="mb-3 d-flex flex-column">
                             <label><b>Email</b></label>
-                            <input type="email" id="email" name="Email" required onChange={handleInputs} />
+                            <input type="email" id="email" name="Email" value={loginDetails.Email} required onChange={handleInputs} placeholder="johncarter@gmail.com" />
                         </div>
 
                         <div className="mb-3 d-flex flex-column">
                             <label><b>Password</b></label>
-                            <input type="password" id="password" name="Password" required onChange={handleInputs} />
+                            <input type="password" id="password" name="Password" value={loginDetails.Password} required onChange={handleInputs} />
                         </div>
 
                         <div className="d-flex justify-content-center">
-                            <button className="btn-normal" type="submit" onClick={postData}>Login</button>
+                            <button className="btn-normal" type="submit" style={loginStatus.status ? { background: '#01966e' } : { background: '#e1775d' }} onClick={postData}>{loginStatus.state}</button>
                         </div>
 
                         <div className="d-flex justify-content-center align-items-center mt-3">
                             <p className="align-middle my-0 me-2">Don't have an account?</p>
-                            
-                            <button className="btn-normal" type="submit" onClick={props.changeStateFunc}>Sign Up</button>
+
+                            <button className="btn-normal btn-bg-grey" type="submit" onClick={props.changeStateFunc}>Sign Up</button>
                         </div>
                     </form>
 

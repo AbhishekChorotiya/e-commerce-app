@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import Image from '../../pages/Image'
 
+import style from "./Cart.module.css"
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -79,30 +80,44 @@ const Single_Cart_Item = (props) => {
     return (
         <Fragment key={props._id}>
 
-            <div className='d-flex justify-content-between'>
+            <div className={`d-flex ${style.justify_complete} ${style.cartWrap}`}>
 
                 {/* Image & Desc Section */}
-                <div className='d-flex justify-content-evenly'>
-                    <Image photoID={props.ImageID}></Image>
+                <div className={`d-flex ${style.justify_part1}`}>
 
-                    <div className='ms-5 d-flex flex-column justify-content-center align-items-center'>
-                        <Link to="#">
-                            <p className='m-auto'>{props.Product}</p>
+                    <div className='d-flex flex-column'>
+                        <Image photoID={props.ImageID} ></Image>
+
+                        <Link to={"/selected?selectedProduct=" + props._id} className= "d-flex justify-content-center" style={{textDecoration : "none"}}>
+                            <button className="btn-normal mt-3">View Product</button>
                         </Link>
 
-                        {/* Description */}
-                        <div className="d-flex align-items-center mt-2">
-                            <p className="mb-auto">{props.Desc}</p>
-                        </div>
                     </div>
+
+                    <div className='ms-5 d-flex justify-content-center align-items-center'>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th className='box text-center p-2'><h5 className='m-0'>Product</h5></th>
+                                    <th className='box text-center p-2'><h5 className='m-0'>Brand</h5></th>
+                                </tr>
+
+                                <tr>
+                                    <td className='box text-center p-2'>{props.Product}</td>
+                                    <td className='box text-center p-2'>{props.Brand}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
 
                 {/* Quantity, Price & Remove Section */}
-                <div className='d-flex justify-content-between'>
+                <div className={`d-flex ${style.justify_part2}`}>
 
                     {/* Quantity */}
                     <div className="d-flex flex-column justify-content-center align-items-center">
-                        <h6><b>Quantity</b></h6>
+                        <h5>Quantity</h5>
 
                         <div className='d-flex justify-content-center align-items-center'>
                             {/* Decrease Quantity Button */}
@@ -126,11 +141,11 @@ const Single_Cart_Item = (props) => {
 
                     {/* Price */}
                     <div className="d-flex flex-column justify-content-center align-items-center col-3">
-                        <h6><b>Price</b></h6>
+                        <h5>Price</h5>
                         <p className='m-0'>$ {props.Price * quantity}</p>
                     </div>
 
-                    {/* Button */}
+                    {/* Delete Button */}
                     <form className="d-flex justify-content-center align-items-center col-3" action='/removeProduct' method='post'>
                         <input className='d-none' type="text" id='myProduct' defaultValue={props._id} name="product"></input>
 

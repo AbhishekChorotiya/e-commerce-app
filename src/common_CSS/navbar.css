@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Play&display=swap');
+
+.my-navbar{
+    padding: 2rem;
+    background: #ffffff;
+    position: sticky;
+    top: 0;
+    box-shadow: 0.1rem 0.1rem 0.7rem rgba(162, 173, 170, 0.5);
+    z-index: 100;
+}
+
+.badge{
+    border-radius: 100%;
+    background-color: #e1775d;
+    color: white;
+    vertical-align: top;
+    position: relative;
+    margin-right: -2rem;
+    right: -1.5rem;
+    z-index: 1;
+}
+
+#text{
+    font-family: 'Play', sans-serif;
+    font-size: 1.7rem;
+    /* font-weight: bold; */
+    text-decoration: none;
+    color: #020202;
+}
+
+
+#profile_icon{
+    transition: all 0.5s ease;
+}
+
+#logo-img{
+    display: none;
+}
+
+
+
+@media screen and (max-width:800px){
+    #cart,#profile{
+    display: none;
+    transition: all 0.5s ease;
+    }
+    
+}
+@media screen and (max-width:600px){
+    #cart_icon,#logout_icon{
+        display: none;
+        transition: all 0.5s ease;
+
+    }
+    #profile_icon{
+        background: #e1775d;
+        color: white;
+        border: none;
+        align-self: center;
+        justify-self: center;
+        transition: all 0.5s ease;
+    }
+}
+
+@media screen and (max-width:480px){
+    #search_div{
+        border: 2px solid red;
+        width: 100%;
+    }
+    #logo{
+        display: none;
+    }
+    #logo-img{
+        display: block;
+    }
+    #search_input{
+        width: 100%;
+    }
+}
